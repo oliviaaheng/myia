@@ -63,9 +63,10 @@ def create_model(train_good_dir, train_bad_dir, config):
         train_images = np.array(train_images)
         train_labels = np.array(train_labels)
             
-
+        print("in model_builder.py, in create model line 66, before model = ")
         # Define the model architecture
         model = models.Sequential([
+            # model trains if below line input_shape=(150, 200, 3) ????
             layers.Conv2D(32, (3, 3), activation='relu', input_shape=(150, 200, 4)),
             layers.MaxPooling2D((2, 2)),
             layers.Conv2D(64, (3, 3), activation='relu'),
@@ -74,12 +75,18 @@ def create_model(train_good_dir, train_bad_dir, config):
             *[layers.Dense(64, activation='relu') for _ in range(config['no_layers'] - 1)],  # Add dense layers based on config
             layers.Dense(1, activation='sigmoid')
         ])
-
+        print("in model_builder.py, in create model line 77, after model = ")
+        
+        print("in model_builder.py, in create model line 79, before model.compile")
         # Compile the model
         model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+        print("in model_builder.py, in create model line 82, after model.compile")
 
+
+        print("in model_builder.py, in create model line 85, before model.fit")
         # Train the model
         model.fit(train_images, train_labels, epochs=config['epochs'])
+        print("in model_builder.py, in create model line 88, after model.fit")
 
         model_name = generate_version_name(f"{config['model_name']}.keras", "model/image_model")
         model_path = f"model/image_model/{model_name}"
