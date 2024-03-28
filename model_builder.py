@@ -66,8 +66,8 @@ def create_model(train_good_dir, train_bad_dir, config):
         print("in model_builder.py, in create model line 66, before model = ")
         # Define the model architecture
         model = models.Sequential([
-            # model trains if below line input_shape=(150, 200, 3) ????
-            layers.Conv2D(32, (3, 3), activation='relu', input_shape=(150, 200, 4)),
+            # model trains if below line input_shape=(150, 200, 3) ????, rbg and alpha layer?
+            layers.Conv2D(32, (3, 3), activation='relu', input_shape=(150, 200, 3)),
             layers.MaxPooling2D((2, 2)),
             layers.Conv2D(64, (3, 3), activation='relu'),
             layers.MaxPooling2D((2, 2)),

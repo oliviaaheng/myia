@@ -75,35 +75,35 @@ def evaluate_and_visualize_model(model_path, test_good_dir, test_bad_dir, model_
             predictions_good = np.power(predictions_good, 1.0 / temperature)
             predictions_bad = np.power(predictions_bad, 1.0 / temperature)
             
-            
-    plt.figure(figsize=(10, 6))
+    # commented out plot info bc error: /Users/Shared/ornldev/projects/myia/validation.py:79: UserWarning: Starting a Matplotlib GUI outside of the main thread will likely fail.
+    # plt.figure(figsize=(10, 6))
 
-    # Plot predictions vs. labels for 'good' class
-    plt.subplot(2, 1, 1)
-    plt.plot(predictions_good, label='Predictions (Good)')
-    plt.plot(test_labels_good, label='True Labels (Good)')
-    plt.xlabel('Image Number')
-    plt.ylabel('Probability')
-    plt.title(f'Model Performance for "Good" Class (Accuracy: {test_accuracy_good:.2f})')
-    plt.legend()
+    # # Plot predictions vs. labels for 'good' class
+    # plt.subplot(2, 1, 1)
+    # plt.plot(predictions_good, label='Predictions (Good)')
+    # plt.plot(test_labels_good, label='True Labels (Good)')
+    # plt.xlabel('Image Number')
+    # plt.ylabel('Probability')
+    # plt.title(f'Model Performance for "Good" Class (Accuracy: {test_accuracy_good:.2f})')
+    # plt.legend()
 
-    # Plot predictions vs. labels for 'bad' class
-    plt.subplot(2, 1, 2)
-    plt.plot(predictions_bad, label='Predictions (Bad)')
-    plt.plot(test_labels_bad, label='True Labels (Bad)')
-    plt.xlabel('Image Number')
-    plt.ylabel('Probability')
-    plt.title(f'Model Performance for "Bad" Class (Accuracy: {test_accuracy_bad:.2f})')
-    plt.legend()
+    # # Plot predictions vs. labels for 'bad' class
+    # plt.subplot(2, 1, 2)
+    # plt.plot(predictions_bad, label='Predictions (Bad)')
+    # plt.plot(test_labels_bad, label='True Labels (Bad)')
+    # plt.xlabel('Image Number')
+    # plt.ylabel('Probability')
+    # plt.title(f'Model Performance for "Bad" Class (Accuracy: {test_accuracy_bad:.2f})')
+    # plt.legend()
 
-    plt.tight_layout()
+    # plt.tight_layout()
     
-    # Add watermark with model name at the bottom right
-    plt.text(0.99, 0.01, f'Model: {model_name}', ha='right', va='bottom', transform=plt.gcf().transFigure, color='grey', fontsize=10, fontweight='bold')
+    # # Add watermark with model name at the bottom right
+    # plt.text(0.99, 0.01, f'Model: {model_name}', ha='right', va='bottom', transform=plt.gcf().transFigure, color='grey', fontsize=10, fontweight='bold')
     
-    plt.show()
+    # plt.show()
     
-    plt.savefig(graph_path)
+    # plt.savefig(graph_path)
     
     model_graph_name = f"graph_{model_name}.png"
     model_graph_path = f"static/images/{model_graph_name}";
@@ -146,4 +146,6 @@ def evaluate_and_visualize_model(model_path, test_good_dir, test_bad_dir, model_
     return graph_path;
 
 def save_graph(graph_path):
-    plt.savefig(graph_path)
+    # commented out plot info bc error: /Users/Shared/ornldev/projects/myia/validation.py:79: UserWarning: Starting a Matplotlib GUI outside of the main thread will likely fail.
+    print("in save-graph")
+    # plt.savefig(graph_path)

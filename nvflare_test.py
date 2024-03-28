@@ -426,26 +426,32 @@ def build_model():
 
     layers = 2
     epochs = 10
-    model_name = "test model"
+    model_name = "test_model"
     print("in build model, before creating")
     build_model = create_model(label_good_dir, label_bad_dir, {'epochs': epochs,  'no_layers': layers, 'model_name': model_name})
     print("in build model, after creating")
     if build_model:
         model_path = build_model['model_path']
         model_name = build_model['model_name']
-        return f"Model {model_name} created successfully!"
+        return model_name
     else:
         return error_response("Model creation failed", 500)
 
+
+# code from evaluation.py
+from tensorflow.keras.models import load_model
+import numpy as np
+from PIL import Image
+import os
 
 if __name__ == '__main__':
     # OLIVIA'S EDITS - called each required function, commented out app.run
     # call the build model 
     # app.run(debug=True) 
 
-    print("before build_model")
-    build_model()
-    print("after build_model")
+    # print("before build_model")
+    model_name = build_model()
+    # print("after build_model")
     # # call validation
     # validation()
     # print("after validation")
@@ -453,3 +459,49 @@ if __name__ == '__main__':
     # get_validation_results()
     # print("after get_validation_results")
     # try: flask could be wrong, move all code to right before the main, 
+    
+    
+    # code from evaluation.py
+    # print("evaluation code beginning")
+    # Load the saved model
+    model = load_model('model/image_model/' + model_name)
+
+    # Define paths to your labeled 'good' and 'bad' test image directories
+    test_good_dir = 'model/evaluation/good'
+    test_bad_dir = 'model/evaluation/bad'
+    # print("before double loop")
+    # Evaluate each image individually
+    for directory in [test_good_dir, test_bad_dir]:
+        for filename in os.listdir(directory):
+            img_path = os.path.join(directory, filename)
+            
+            # print("before loading image")
+            # Load and preprocess the image
+            img = Image.open(img_path)
+            img = img.resize((200, 150))  # Adjust image size as needed
+
+            # print(np.array(img))
+            img = np.expand_dims(np.array(img) / 255.0, axis=0)  # Add batch dimension
+            # print(f"after expanding dims{img}")
+
+            # print("after loading image")
+            # print(model.predict(img))
+            # Predict the class
+            # print(filename)
+            prediction = model.predict(img)[0][0]  # Extract the prediction value
+            predicted_class = 1 if prediction >= 0.5 else 0  # Threshold for binary classification
+
+            # Print the results in the terminal
+            # print("before image prints")
+            print(f"Image: {img_path}")
+            print(f"Predicted class: {'Good' if predicted_class == 1 else 'Bad'}")
+            print(f"Prediction score: {prediction:.4f}")
+            print("----------------------------------")
+            # print("after image prints")
+
+    
+    # code from evaluation.py
+
+    # print("evaluation code ending")
+
+
