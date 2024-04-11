@@ -15,8 +15,8 @@
 import os.path
 
 import torch
-from pt_constants import PTConstants
-from simple_network import SimpleNetwork
+# from pt_constants import PTConstants
+# from simple_network import SimpleNetwork
 from torch import nn
 from torch.optim import SGD
 from torch.utils.data.dataloader import DataLoader
@@ -93,17 +93,25 @@ class MyiaTrainer(Executor):
         # )
 
     def execute(self, task_name: str, shareable: Shareable, fl_ctx: FLContext, abort_signal: Signal):
-        try:
-            if task_name == self._pre_train_task_name:
-                # Get the new state dict and send as weights
-                return self._get_model_weights()
-            elif task_name == self._train_task_name:
-                with open('test.txt', 'w') as file:
-                    file.write("in execute")
-                    # remove try block and only write to file
-                    # concerned it is writing the file in the workspace directory and deleting it, 
-                    # rewrite file to a different directory like desktop
+        # try:
+        #     if task_name == self._pre_train_task_name:
+        #         # Get the new state dict and send as weights
+        #         return self._get_model_weights()
+        #     elif task_name == self._train_task_name:
+        #         with open('test.txt', 'w') as file:
+        #             file.write("in execute")
+        with open('test.txt', 'w') as file:
+            # it does not write to test.txt file, so i can make a new file manually with the same name
+            # question: would this file be made in the path we provided in the nvflare simulator? so Shared/ornldev/projects/custom/app ?
+            file.write("in execute")            
+# 
+# remove try block and only write to file
+    # recieved ModuleNotFoundError: No module named 'torch', ModuleNotFoundError: No module named 'pt_constants', 'ModuleNotFoundError: No module named 'simple_network''
+    # solution: pip install torchvision , comment out other two lines
+    # question: should i add this version of torch to requirements (nvflare or for myia)?
 
+# concerned it is writing the file in the workspace directory and deleting it, so
+    # rewrite file to a different directory like desktop
                
 
     def _get_model_weights(self) -> Shareable:
