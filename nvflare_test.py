@@ -423,7 +423,7 @@ def build_model():
 #     layers = request.form.get('layers', default=1, type=int)
 #     epochs = request.form.get('epochs', default=10, type=int)
     # model_name = request.form.get('model_name', default='myia_image_classifier', type=str)
-
+    # copied 426-438 to myiatrainer.py
     layers = 2
     epochs = 10
     model_name = "test_model"

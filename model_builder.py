@@ -5,7 +5,7 @@ import numpy as np
 from PIL import Image
 import os
 
-def create_model(train_good_dir, train_bad_dir, config):
+def create_model(train_good_dir, train_bad_dir, img_model_dir, config):
     """Creates and trains an image classification model.
 
     Args:
@@ -19,18 +19,16 @@ def create_model(train_good_dir, train_bad_dir, config):
         dict: A dictionary containing the model name and path, or False on error.
     """
 
-
-
     try:
         # Check directory existence
         if not os.path.exists(train_good_dir) or not os.path.exists(train_bad_dir):
             raise Exception("Training directories do not exist")
 
+        # copied into myia trainer execute
         # Load and preprocess images
         train_images = []
         train_labels = []
     
-
         for filename in os.listdir(train_good_dir):
             if not filename.lower().endswith(('.png', '.jpg')):
                 continue
@@ -65,16 +63,17 @@ def create_model(train_good_dir, train_bad_dir, config):
             
         print("in model_builder.py, in create model line 66, before model = ")
         # Define the model architecture
-        model = models.Sequential([
-            # model trains if below line input_shape=(150, 200, 3) ????, rbg and alpha layer?
-            layers.Conv2D(32, (3, 3), activation='relu', input_shape=(150, 200, 3)),
-            layers.MaxPooling2D((2, 2)),
-            layers.Conv2D(64, (3, 3), activation='relu'),
-            layers.MaxPooling2D((2, 2)),
-            layers.Flatten(),
-            *[layers.Dense(64, activation='relu') for _ in range(config['no_layers'] - 1)],  # Add dense layers based on config
-            layers.Dense(1, activation='sigmoid')
-        ])
+        # moved to myia trainer
+        # model = models.Sequential([
+        #     # model trains if below line input_shape=(150, 200, 3) ????, rbg and alpha layer?
+        #     layers.Conv2D(32, (3, 3), activation='relu', input_shape=(150, 200, 3)),
+        #     layers.MaxPooling2D((2, 2)),
+        #     layers.Conv2D(64, (3, 3), activation='relu'),
+        #     layers.MaxPooling2D((2, 2)),
+        #     layers.Flatten(),
+        #     *[layers.Dense(64, activation='relu') for _ in range(config['no_layers'] - 1)],  # Add dense layers based on config
+        #     layers.Dense(1, activation='sigmoid')
+        # ])
         print("in model_builder.py, in create model line 77, after model = ")
         
         print("in model_builder.py, in create model line 79, before model.compile")
@@ -82,19 +81,19 @@ def create_model(train_good_dir, train_bad_dir, config):
         model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
         print("in model_builder.py, in create model line 82, after model.compile")
 
-
         print("in model_builder.py, in create model line 85, before model.fit")
         # Train the model
         model.fit(train_images, train_labels, epochs=config['epochs'])
         print("in model_builder.py, in create model line 88, after model.fit")
 
-        model_name = generate_version_name(f"{config['model_name']}.keras", "model/image_model")
-        model_path = f"model/image_model/{model_name}"
+        model_name = generate_version_name(f"{config['model_name']}.keras", img_model_dir)
+        model_path = f"{img_model_dir}/{model_name}"
 
         # Save the model
         model.save(model_path)
 
-        return {"model_name": model_name, "model_path": model_path}
+        # return {"model_name": model_name, "model_path": model_path}
+        return model
 
     except Exception as e:
         print(f"Error creating model: {str(e)}")
@@ -103,5 +102,5 @@ def create_model(train_good_dir, train_bad_dir, config):
 
 if __name__ == "__main__":
     config = {"epochs": 15, "no_layers": 2}
-    model = create_model("model/labeled/good", "model/labeled/bad", config)
+    model = create_model("/Users/Shared/ornldev/projects/custom/app/custom/model/labeled/good", "/Users/Shared/ornldev/projects/custom/app/custom/model/labeled/bad", config)
     print(model)
